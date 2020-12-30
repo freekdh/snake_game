@@ -1,19 +1,47 @@
 #include <iostream>
+using namespace std;
+bool gameOver;
 
-int main() {
-    try {
-        int age = 15;
-        if (age >= 18) {
-            cout << "Access granted - you are old enough.";
-        } else {
-            throw (age);
-        }
+const int width = 20;
+const int height = 20;
+
+int x, y, fruitX, fruitY, score;
+enum eDirection
+{
+    STOP = 0,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+eDirection dir;
+
+void Setup()
+{
+    gameOver = false;
+    dir = STOP;
+    x = width / 2;
+    y = height / 2;
+    fruitX = rand() % width;
+    fruitY = rand() % height;
+}
+void Draw()
+{
+}
+void Input()
+{
+}
+void Logic()
+{
+}
+
+int main()
+{
+    Setup();
+    while (!gameOver)
+    {
+        Draw();
+        Input();
+        Logic();
     }
-    catch (int myNum) {
-        cout << "Access denied - You must be at least 18 years old.\n";
-        cout << "Age is: " << myNum;
-    }
-
-
-    return 0;
 }
