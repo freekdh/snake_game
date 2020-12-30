@@ -27,6 +27,29 @@ void Setup()
 }
 void Draw()
 {
+    system("clear");
+
+    for (int i = 0; i <= width + 1; ++i)
+        cout << "#";
+    cout << endl;
+
+    for (int i = 1; i <= height; ++i)
+    {
+        for (int j = 0; j <= width + 1; ++j)
+        {
+            if (j == 0 || j == width + 1)
+            {
+                cout << "#";
+            }
+            else
+                cout << " ";
+        }
+        cout << endl;
+    }
+
+    for (int i = 0; i <= width + 1; ++i)
+        cout << "#";
+    cout << endl;
 }
 void Input()
 {
