@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 bool gameOver;
 
@@ -41,6 +42,10 @@ void Draw()
             {
                 cout << "#";
             }
+            else if (i == y && j == x)
+                cout << "O";
+            else if (i == fruitY && j == fruitX)
+                cout << "F";
             else
                 cout << " ";
         }
@@ -66,5 +71,6 @@ int main()
         Draw();
         Input();
         Logic();
+        sleep(1);
     }
 }
