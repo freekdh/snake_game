@@ -1,5 +1,7 @@
 #include <iostream>
 #include <unistd.h>
+#include <ncurses.h>
+#include <string.h>
 using namespace std;
 bool gameOver;
 
@@ -17,6 +19,21 @@ enum eDirection
 };
 eDirection dir;
 
+int kbhit(void)
+{
+    int ch = getch();
+
+    if (ch != ERR)
+    {
+        ungetch(ch);
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void Setup()
 {
     gameOver = false;
@@ -25,14 +42,21 @@ void Setup()
     y = height / 2;
     fruitX = rand() % width;
     fruitY = rand() % height;
+
+    initscr();
+    cbreak();
+    noecho();
+    nodelay(stdscr, TRUE);
+    scrollok(stdscr, TRUE);
 }
+
 void Draw()
 {
-    system("clear");
+    clear();
 
     for (int i = 0; i <= width + 1; ++i)
-        cout << "#";
-    cout << endl;
+        printw("#");
+    printw("\n");
 
     for (int i = 1; i <= height; ++i)
     {
@@ -40,27 +64,60 @@ void Draw()
         {
             if (j == 0 || j == width + 1)
             {
-                cout << "#";
+                printw("#");
             }
             else if (i == y && j == x)
-                cout << "O";
+                printw("O");
             else if (i == fruitY && j == fruitX)
-                cout << "F";
+                printw("F");
             else
-                cout << " ";
+                printw(" ");
         }
-        cout << endl;
+        printw("\n");
     }
 
     for (int i = 0; i <= width + 1; ++i)
-        cout << "#";
-    cout << endl;
+        printw("#");
+    printw("\n");
 }
+
 void Input()
 {
+    if (kbhit())
+    {
+        switch (getch())
+        {
+        case 97:
+            printw("LEFT");
+            dir = LEFT;
+            break;
+        case 100:
+            printw("RIGHT");
+            dir = RIGHT;
+            break;
+        case 119:
+            printw("UP");
+            dir = UP;
+            break;
+        case 115:
+            printw("DOWN");
+            dir = DOWN;
+            break;
+        }
+    }
+
+    for (int i = 0; i < 10; ++i)
+    {
+        getch();
+    }
+
+    // Clear the input line.
 }
 void Logic()
 {
+    // switch (dir):
+    //     case STOP:
+    //         break;
 }
 
 int main()
@@ -71,6 +128,7 @@ int main()
         Draw();
         Input();
         Logic();
+        refresh();
         sleep(1);
     }
 }
