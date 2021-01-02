@@ -1,14 +1,17 @@
 #include <iostream>
 #include <unistd.h>
 #include <ncurses.h>
+#include <vector>
 #include <string.h>
 using namespace std;
 bool gameOver;
 
-const int width = 20;
-const int height = 20;
+const int width = 25;
+const int height = 25;
 
 int x, y, fruitX, fruitY, score;
+std::vector<int> x_vec, y_vec;
+
 enum eDirection
 {
     STOP = 0,
@@ -40,6 +43,8 @@ void Setup()
     dir = STOP;
     x = width / 2;
     y = height / 2;
+    x_vec.push_back(x);
+    y_vec.push_back(y);
     fruitX = rand() % width;
     fruitY = rand() % height;
 
@@ -88,36 +93,60 @@ void Input()
         switch (getch())
         {
         case 97:
-            printw("LEFT");
             dir = LEFT;
             break;
         case 100:
-            printw("RIGHT");
             dir = RIGHT;
             break;
         case 119:
-            printw("UP");
             dir = UP;
             break;
         case 115:
-            printw("DOWN");
             dir = DOWN;
             break;
         }
     }
-
     for (int i = 0; i < 10; ++i)
     {
         getch();
     }
-
-    // Clear the input line.
 }
 void Logic()
 {
-    // switch (dir):
-    //     case STOP:
-    //         break;
+    switch (dir)
+    {
+    case STOP:
+        break;
+    case LEFT:
+        x -= 1;
+        x_vec.insert(x_vec.begin(), x - 1);
+        x_vec.pop_back();
+        break;
+    case RIGHT:
+        x += 1;
+        x_vec.insert(x_vec.begin(), x + 1);
+        x_vec.pop_back();
+        break;
+    case UP:
+        y -= 1;
+        y_vec.insert(y_vec.begin(), y - 1);
+        y_vec.pop_back();
+        break;
+    case DOWN:
+        y += 1;
+        y_vec.insert(y_vec.begin(), y + 1);
+        y_vec.pop_back();
+        break;
+    }
+
+    if (x == 0 || x == width + 1 || y == 0 || y == height + 1)
+        gameOver = true;
+    if (x == fruitX && y == fruitY)
+    {
+        score += 1;
+        fruitX = rand() % width;
+        fruitY = rand() % height;
+    }
 }
 
 int main()
@@ -129,6 +158,8 @@ int main()
         Input();
         Logic();
         refresh();
-        sleep(1);
+        usleep(100000);
     }
+    clear();
+    printf("Game Over. Score = %d", score);
 }
